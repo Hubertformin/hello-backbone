@@ -1,7 +1,7 @@
 {
-  "name": "tickket-backbone",
+  "name": "hello-backbone",
   "version": "1.0.0",
-  "description": "This is the official Node.js backend project for the tickket platform",
+  "description": "This is the official Node.js backend project for the hello platform",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -r dotenv/config src/index.ts",
@@ -25,6 +25,7 @@
   "homepage": "https://github.com/enchird-entity/tickket-backbone#readme",
   "devDependencies": {
     "@types/node": "^17.0.8",
+    "@types/pdfmake": "^0.2.2",
     "@types/ua-parser-js": "^0.7.36",
     "nodemon": "^2.0.15",
     "ts-node": "^10.4.0",
@@ -34,6 +35,7 @@
     "@sentry/node": "^6.19.4",
     "@sentry/tracing": "^6.19.4",
     "@types/express": "^4.17.13",
+    "axios": "^1.3.0",
     "body-parser": "^1.19.1",
     "cors": "^2.8.5",
     "csurf": "^1.11.0",
@@ -42,7 +44,10 @@
     "helmet": "^5.0.2",
     "mongoose": "^6.1.6",
     "morgan": "^1.10.0",
+    "nodemailer": "^6.9.1",
+    "pdfmake": "^0.2.7",
     "rate-limiter-flexible": "^2.3.6",
+    "short-uuid": "^4.2.2",
     "swagger-ui-express": "^4.3.0",
     "ua-parser-js": "^1.0.2",
     "yamljs": "^0.3.0"

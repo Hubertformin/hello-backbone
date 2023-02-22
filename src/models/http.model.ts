@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { QuoteDocument, QuoteModel } from "./quote.model";
 
 export interface HttpRequest extends Request {
   userAgent?: {
@@ -25,4 +26,5 @@ export interface HttpRequest extends Request {
       architecture?: string;
     };
   };
+  $currentQuote$?: QuoteDocument
 }

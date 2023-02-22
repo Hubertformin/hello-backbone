@@ -4,37 +4,41 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import userRouter from "./routes/user.routes";
-import * as Sentry from "@sentry/node";
-import * as Tracing from "@sentry/tracing";
-import helmet from "helmet";
-import csrf from "csurf";
-import * as swaggerUi from "swagger-ui-express";
-import * as YAML from "yamljs";
+import quoteRouter from "./routes/quote.route";
+import serviceRouter from "./routes/service.route";
+// import * as Sentry from "@sentry/node";
+// import * as Tracing from "@sentry/tracing";
+// import helmet from "helmet";
+// import csrf from "csurf";
+// import * as swaggerUi from "swagger-ui-express";
+// import * as YAML from "yamljs";
 import { userAgent } from "./middleware";
 
 const app = express();
 const port = process.env.PORT || 5100;
 
-Sentry.init({
-  dsn: process.env.SENTRY_DNS,
-  integrations: [
-    // enable HTTP calls tracing
-    new Sentry.Integrations.Http({ tracing: true }),
-    // enable Express.js middleware tracing
-    new Tracing.Integrations.Express({ app }),
-  ],
-
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-});
+// Sentry.init({
+//   dsn: process.env.SENTRY_DNS,
+//   integrations: [
+//     // enable HTTP calls tracing
+//     new Sentry.Integrations.Http({ tracing: true }),
+//     // enable Express.js middleware tracing
+//     new Tracing.Integrations.Express({ app }),
+//   ],
+//
+//   // Set tracesSampleRate to 1.0 to capture 100%
+//   // of transactions for performance monitoring.
+//   // We recommend adjusting this value in production
+//   tracesSampleRate: 1.0,
+// });
 
 //Connect to database
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("[SERVER] Connected to database!");
+    // run seed
+    // await seedService()
   })
   .catch(() => {
     console.log("[SERVER] Unable to Connect to database!");
@@ -45,11 +49,11 @@ mongoose
 /** SENTRY RequestHandler creates a separate execution context using domains, so that every
  * transaction/span/breadcrumb is attached to its own Hub instance
  * */
-app.use(Sentry.Handlers.requestHandler());
+// app.use(Sentry.Handlers.requestHandler());
 /**
  * TracingHandler creates a trace for every incoming request
  */
-app.use(Sentry.Handlers.tracingHandler());
+// app.use(Sentry.Handlers.tracingHandler());
 
 /**
  * Cors Headers middle-ware
@@ -67,11 +71,11 @@ app.use(bodyParser.json());
  * Helmet protects the app from some well-known web vulnerabilities
  * by setting HTTP headers appropriately.
  */
-app.use(helmet());
+// app.use(helmet());
 /**
  * Block Cross-Site Request Forgeries
  */
-app.use(csrf());
+// app.use(csrf());
 /**
  * User Agent middleware
  */
@@ -83,16 +87,18 @@ app.use(morgan("dev"));
 
 // ===================================== ROUTES ========================================
 app.use("/users", userRouter);
+app.use("/quotes", quoteRouter);
+app.use("/services", serviceRouter);
 
 // Swagger documentation route
-app.use(
-  "/api-docs",
-  swaggerUi.serve,
-  swaggerUi.setup(YAML.load("./swagger.yaml"))
-);
+// app.use(
+//   "/api-docs",
+//   swaggerUi.serve,
+//   swaggerUi.setup(YAML.load("./swagger.yaml"))
+// );
 
 // The error handler must be before any other error middleware and after all controllers
-app.use(Sentry.Handlers.errorHandler());
+// app.use(Sentry.Handlers.errorHandler());
 
 app.listen(port, () => {
   console.log(`[SERVER] Server is running on the port ${port}.`);
